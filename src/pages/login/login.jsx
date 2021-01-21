@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./login.scss";
-import logo from "./images/logo.png";
+import logo from "../../assets/images/logo.png";
 
 export default class login extends Component {
   render() {
