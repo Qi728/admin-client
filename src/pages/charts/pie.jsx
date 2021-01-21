@@ -4,7 +4,7 @@ export default class Pie extends Component {
   render() {
     return (
       <div>
-        柱状图
+        饼图
       </div>
     )
   }

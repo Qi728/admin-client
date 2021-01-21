@@ -9,7 +9,6 @@ import {
   TeamOutlined
 } from '@ant-design/icons';
 
-
 import menuList from '../../config/menuConfig'
 import logo from '../../assets/images/logo.png'
 import './index.scss'
@@ -17,14 +16,39 @@ import './index.scss'
 const { SubMenu } = Menu;
 
 // 左侧导航组件
-export default class LeftNav extends Component {
+class LeftNav extends Component {
   state = {
     collapsed: false,
   };
 
 
+  getMenuNodes = (menuList) => {
+    return menuList.map(item => {
+      if(!item.children){
+        return (
+          <Menu.Item key={item.key} icon={<PieChartOutlined />}>
+            <Link to={item.key}>
+              <span>{item.title}</span>
+            </Link>
+          </Menu.Item>
+        )
+      }else{
+        return (
+          <SubMenu key={item.key} icon={<MailOutlined />} title={item.title}  >
+            {this.getMenuNodes(item.children)} 
+          </SubMenu> 
+        )
+      }
+    })
+  }
+
+  componentWillMount () {
+    this.menuNodes = this.getMenuNodes(menuList)
+  }
   
   render() {
+
+    const path = this.props.location.pathname
     return (
       <div to='/' className='left-nav'>
         <Link className='left-nav-header'>
@@ -32,32 +56,24 @@ export default class LeftNav extends Component {
           <h1>谷粒后台</h1>
         </Link>
 
-        <Menu
-          mode="inline"
-          theme="dark"
-          inlineCollapsed={this.state.collapsed}
-        >
-          <Menu.Item key="/home" icon={<PieChartOutlined />}>
-            <Link to='/home'>
-              <span>首页</span>
-            </Link>
-          </Menu.Item>
+        <Menu mode="inline" theme="dark"  inlineCollapsed={this.state.collapsed} selectedKeys={[path]} >
 
-          <SubMenu key="sub1" icon={<MailOutlined />} title="商品">
-            <Menu.Item key="/category" icon={<AppstoreOutlined />} >
-              <Link to='/category'>
-                <span>品类管理</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="/product" icon={<AppstoreOutlined />} >
-              <Link to='/product'>
-                <span>商品管理</span>
-              </Link>
-            </Menu.Item>  
-          </SubMenu>
-
+        {
+          this.getMenuNodes(menuList)
+        }
         </Menu>
       </div>
     )
   }
 }
+
+
+// 包装非路由组件, 返回一个新的组件
+// 新的组件向非路由组件传递3个属性: history/location/match
+export default withRouter(LeftNav)
+
+
+
+// ?? 
+// 自动打开当前子列表
+

@@ -4,7 +4,7 @@ export default class Bar extends Component {
   render() {
     return (
       <div>
-        饼图
+        柱形图
       </div>
     )
   }
